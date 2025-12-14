@@ -68,5 +68,3 @@ _Người này lo phần xuất file, in ấn và làm đẹp giao diện._
 1.  **URL Token:** Đề bài yêu cầu URL dạng `https://domain.com/menu?table={id}&token={token}`. Khi code ở local, hãy để là `http://localhost:5173/menu?...`.
 2.  **Bảo mật:** Token lưu trong Database (`qr_token`) là để đối chiếu. Khi quét mã, Backend phải so sánh token gửi lên có trùng với token đang lưu trong DB của bàn đó không. Nếu khác -\> Báo lỗi (Đây là cơ chế Invalidate cũ).
 3.  **Validation:** TV1 chú ý validate `capacity > 0` và `capacity <= 20` ngay trong DTO của NestJS.
-
-Bạn có muốn mình hỗ trợ chi tiết code mẫu cho phần nào trước không (ví dụ: Config JWT trong NestJS hay cách dùng thư viện tạo PDF)?
