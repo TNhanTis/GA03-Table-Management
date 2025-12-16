@@ -1,0 +1,25 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model tables {
+  id                  String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  table_number        String    @unique @db.VarChar(50)
+  capacity            Int
+  location            String?   @db.VarChar(100)
+  description         String?
+  status              String?   @default("active") @db.VarChar(20)
+  qr_token            String?   @db.VarChar(500)
+  qr_token_created_at DateTime? @db.Timestamp(6)
+  created_at          DateTime? @default(now()) @db.Timestamp(6)
+  updated_at          DateTime? @default(now()) @db.Timestamp(6)
+
+  @@index([location], map: "idx_tables_location")
+  @@index([status], map: "idx_tables_status")
+}

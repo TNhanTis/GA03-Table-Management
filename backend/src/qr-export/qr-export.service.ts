@@ -1,8 +1,11 @@
-import { Injectable, StreamableFile } from '@nestjs/common';
-import * as PDFDocument from 'pdfkit';
-import * as QRCode from 'qrcode';
-import * as archiver from 'archiver';
-import { Response } from 'express';
+import { Injectable } from '@nestjs/common';
+import QRCode from 'qrcode';
+import PDFDocument from 'pdfkit';
+// archiver's ESM/CJS interop can be flaky with namespace imports in TS builds
+// so require it at runtime to get a callable function
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const archiver = require('archiver');
+import type { Response } from 'express';
 
 // Giả lập kiểu dữ liệu Table (lấy từ module của TV1)
 interface TableMock {
