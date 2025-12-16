@@ -1,6 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { TablesService } from './tables.service';
 import { PrismaService } from 'src/prisma.service';
+import { QrTokenService } from '../qr-token/qr-token.service';
 
 describe('TablesService', () => {
   let service: TablesService;
