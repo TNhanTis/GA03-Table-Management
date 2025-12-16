@@ -72,4 +72,28 @@ export class TablesService {
       data: { status: 'inactive' },
     });
   }
+
+  async generateQrCode(id: string) {
+    const table = await this.findOne(id); // Check bàn tồn tại
+    const token = this.qrTokenService.generateQrToken(table.id);
+
+    const updated = await this.prisma.tables.update({
+      where: { id },
+      data: {
+        qr_token: token,
+        qr_token_created_at: new Date(),
+      },
+    });
+    return {
+      ...updated,
+      qr_url: this.qrTokenService.generateQrUrl(table.id, token),
+    };
+  }
+  /**
+   * Regenerate QR - Tạo token mới và invalidate token cũ
+   */
+  async regenerateQrCode(id: string) {
+    // Logic giống generateQrCode - đè token cũ = tự động invalidate
+    return this.generateQrCode(id);
+  }
 }
