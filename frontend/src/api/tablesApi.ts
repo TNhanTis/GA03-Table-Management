@@ -111,4 +111,38 @@ export const tablesApi = {
     const response = await api.get<string[]>("/tables/locations");
     return response.data;
   },
+
+  generateQr: async (id: string) => {
+    const response = await api.post<QrTokenResponse>(
+      `/tables/${id}/qr/generate`
+    );
+    return response.data;
+  },
+
+  regenerateQr: async (id: string) => {
+    const response = await api.post<QrTokenResponse>(
+      `/tables/${id}/qr/regenerate`
+    );
+    return response.data;
+  },
+
+  downloadPdf: async (id: string) => {
+    const response = await api.get(`/tables/qr/${id}/download-pdf`, {
+      responseType: "blob",
+    });
+    return response.data;
+  },
+
+  downloadAllZip: async () => {
+    const response = await api.get("/tables/qr/download-all-zip", {
+      responseType: "blob",
+    });
+    return response.data;
+  },
+  verifyQrAndGetMenu: async (tableId: string, token: string) => {
+    const response = await api.get<MenuResponse>("/api/menu", {
+      params: { table: tableId, token: token },
+    });
+    return response.data;
+  },
 };
