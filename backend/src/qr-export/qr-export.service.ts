@@ -1,7 +1,7 @@
 import { Injectable, StreamableFile } from '@nestjs/common';
-import * as PDFDocument from 'pdfkit';
-import * as QRCode from 'qrcode';
-import * as archiver from 'archiver';
+import PDFDocument from 'pdfkit';
+import QRCode from 'qrcode';
+import archiver from 'archiver';
 import { Response } from 'express';
 import { Table } from '@prisma/client';
 

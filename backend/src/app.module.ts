@@ -5,6 +5,7 @@ import { AppService } from './app.service';
 import { PrismaModule } from './prisma/prisma.module';
 import { TablesModule } from './tables/tables.module';
 import { QrTokenModule } from './qr-token/qr-token.module';
+import { QrExportModule } from './qr-export/qr-export.module';
 import { MenuModule } from './menu/menu.module';
 
 @Module({
@@ -15,6 +16,7 @@ import { MenuModule } from './menu/menu.module';
     PrismaModule,
     TablesModule,
     QrTokenModule,
+    QrExportModule,
     MenuModule,
   ],
   controllers: [AppController],
