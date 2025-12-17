@@ -1,4 +1,12 @@
-import { Controller } from '@nestjs/common';
+import { Controller, Post, Param } from '@nestjs/common';
+import { QrTokenService } from './qr-token.service';
 
-@Controller('qr-token')
-export class QrTokenController {}
+@Controller('tables')
+export class QrTokenController {
+  constructor(private qrTokenService: QrTokenService) {}
+
+  @Post(':id/qr/generate')
+  async generateQr(@Param('id') tableId: string) {
+    return this.qrTokenService.generateToken(tableId);
+  }
+}
