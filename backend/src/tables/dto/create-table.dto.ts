@@ -1,19 +1,30 @@
-import { IsInt, IsOptional, IsString, Max, Min } from 'class-validator';
+import {
+    IsString,
+    IsInt,
+    IsOptional,
+    IsNotEmpty,
+    Min,
+    Max,
+    MaxLength,
+} from 'class-validator';
 
 export class CreateTableDto {
-  @IsString()
-  table_number: string;
+    @IsString()
+    @IsNotEmpty({ message: 'Table number is required' })
+    @MaxLength(50, { message: 'Table number must not exceed 50 characters' })
+    table_number: string;
 
-  @IsInt()
-  @Min(1)
-  @Max(20)
-  capacity: number;
+    @IsInt({ message: 'Capacity must be an integer' })
+    @Min(1, { message: 'Capacity must be at least 1' })
+    @Max(20, { message: 'Capacity must not exceed 20' })
+    capacity: number;
 
-  @IsOptional()
-  @IsString()
-  location?: string;
+    @IsString()
+    @IsOptional()
+    @MaxLength(100, { message: 'Location must not exceed 100 characters' })
+    location?: string;
 
-  @IsOptional()
-  @IsString()
-  description?: string;
+    @IsString()
+    @IsOptional()
+    description?: string;
 }
