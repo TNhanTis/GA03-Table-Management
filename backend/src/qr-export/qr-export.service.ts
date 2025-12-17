@@ -1,7 +1,7 @@
 import { Injectable, StreamableFile } from '@nestjs/common';
-import PDFDocument from 'pdfkit';
+import * as PDFDocument from 'pdfkit';
 import * as QRCode from 'qrcode';
-import archiver from 'archiver';
+import * as archiver from 'archiver';
 import { Response } from 'express';
 import { Table } from '@prisma/client';
 
@@ -30,7 +30,9 @@ export class QrExportService {
 
     // Sinh ảnh QR từ token
     // Lưu ý: Token này phải là URL đầy đủ (ví dụ: https://domain.com/menu?...)
-    const qrDataUrl = await QRCode.toDataURL(table.qr_token || '', { width: 300 });
+    const qrDataUrl = await QRCode.toDataURL(table.qr_token || '', {
+      width: 300,
+    });
 
     // Chèn ảnh QR vào giữa trang
     doc.image(qrDataUrl, (doc.page.width - 300) / 2, 150, { width: 300 });
@@ -60,7 +62,9 @@ export class QrExportService {
     // Duyệt qua danh sách bàn và thêm file vào zip
     for (const table of tables) {
       // Tạo buffer ảnh PNG từ token
-      const buffer = await QRCode.toBuffer(table.qr_token || '', { width: 500 });
+      const buffer = await QRCode.toBuffer(table.qr_token || '', {
+        width: 500,
+      });
 
       // Thêm vào file zip với tên: Table-1.png
       archive.append(buffer, { name: `Table-${table.table_number}.png` });
