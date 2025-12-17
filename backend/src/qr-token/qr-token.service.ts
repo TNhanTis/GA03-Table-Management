@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from '../prisma/prisma.service';
 @Injectable()
@@ -13,10 +13,14 @@ export class QrTokenService {
       where: { id: tableId },
     });
 
+    if (!table) {
+      throw new NotFoundException(`Table with ID ${tableId} not found`);
+    }
+
     // 2. Tạo payload
     const payload = {
       tableId: tableId,
-      restaurantId: 'RESTAURANT_001', // Hardcode hoặc lấy từ config
+      restaurantId: 'RESTAURANT_001',
       timestamp: new Date().toISOString(),
     };
 
@@ -35,6 +39,6 @@ export class QrTokenService {
     // 5. Tạo URL đầy đủ
     const qrUrl = `http://localhost:5173/menu?table=${tableId}&token=${token}`;
 
-    return { token, qrUrl };
+    return { token, qrUrl, tableNumber: table.table_number };
   }
 }
