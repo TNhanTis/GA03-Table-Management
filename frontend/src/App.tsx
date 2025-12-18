@@ -3,6 +3,7 @@ import { tablesApi } from "./api/tablesApi";
 import type { Table, CreateTableData, UpdateTableData } from "./api/tablesApi";
 import QRCode from "react-qr-code";
 import { useToast } from "./contexts/ToastContext";
+import { useConfirm } from "./components/ConfirmDialog";
 import "./App.css";
 
 function App() {
@@ -12,6 +13,7 @@ function App() {
   const [error, setError] = useState<string | null>(null);
 
   const toast = useToast();
+  const { confirm, ConfirmDialogComponent } = useConfirm();
 
   // Filters
   const [statusFilter, setStatusFilter] = useState<string>("");
@@ -114,13 +116,18 @@ function App() {
   };
 
   const handleDelete = async (id: string) => {
-    if (!confirm("Are you sure you want to delete this table?")) return;
+    const confirmed = await confirm(
+      "Xác nhận xóa bàn",
+      "Bạn có chắc chắn muốn xóa bàn này không?"
+    );
+    if (!confirmed) return;
 
     try {
       await tablesApi.delete(id);
+      toast.success("Xóa bàn thành công!");
       loadTables();
     } catch (err: any) {
-      alert(err.response?.data?.message || "Failed to delete table");
+      toast.error(err.response?.data?.message || "Failed to delete table");
     }
   };
 
@@ -136,30 +143,33 @@ function App() {
   };
 
   const handleGenerateQr = async (tableId: string) => {
-    // Confirm bằng custom modal (sẽ làm ở bước 7)
-    if (!window.confirm("Tạo mã QR cho bàn này?")) return; // Tạm dùng native
+    const confirmed = await confirm(
+      "Tạo mã QR",
+      "Bạn có muốn tạo mã QR cho bàn này không?"
+    );
+    if (!confirmed) return;
+
     try {
       const result = await tablesApi.generateQr(tableId);
-      toast.success(`Tạo QR thành công! URL: ${result.qrUrl}`); // ✅ Toast
+      toast.success(`Tạo mã QR thành công!`);
       loadTables();
     } catch (err: any) {
-      toast.error(err.response?.data?.message || "Failed to generate QR"); // ✅ Toast
+      toast.error(err.response?.data?.message || "Tạo QR thất bại");
     }
   };
   const handleRegenerateQr = async (tableId: string, tableNumber: string) => {
-    if (
-      !window.confirm(
-        `⚠️ Tạo lại QR cho "${tableNumber}" sẽ vô hiệu hóa QR cũ. Tiếp tục?`
-      )
-    )
-      return;
+    const confirmed = await confirm(
+      "⚠️ Tạo lại mã QR",
+      `Tạo lại QR cho bàn "${tableNumber}" sẽ vô hiệu hóa QR cũ.\n\nBạn có chắc chắn muốn tiếp tục?`
+    );
+    if (!confirmed) return;
 
     try {
       await tablesApi.regenerateQr(tableId);
-      toast.success("Đã tạo QR mới! QR cũ đã vô hiệu."); // ✅ Toast
+      toast.success(`Đã tạo QR mới cho bàn ${tableNumber}! QR cũ đã vô hiệu.`);
       loadTables();
     } catch (err: any) {
-      toast.error(err.response?.data?.message || "Failed to regenerate QR"); // ✅ Toast
+      toast.error(err.response?.data?.message || "Tạo lại QR thất bại");
     }
   };
   const handleDownloadPdf = async (tableId: string, tableNumber: string) => {
@@ -291,8 +301,8 @@ function App() {
                       Created:{" "}
                       {table.qr_token_created_at
                         ? new Date(
-                          table.qr_token_created_at
-                        ).toLocaleDateString()
+                            table.qr_token_created_at
+                          ).toLocaleDateString()
                         : "N/A"}
                     </small>
                   </div>
@@ -345,8 +355,9 @@ function App() {
                   ✏️ Edit
                 </button>
                 <button
-                  className={`btn btn-sm ${table.status === "active" ? "btn-warning" : "btn-success"
-                    }`}
+                  className={`btn btn-sm ${
+                    table.status === "active" ? "btn-warning" : "btn-success"
+                  }`}
                   onClick={() => handleToggleStatus(table)}
                 >
                   {table.status === "active" ? "⏸️ Deactivate" : "▶️ Activate"}
@@ -514,6 +525,9 @@ function App() {
           </div>
         </div>
       )}
+
+      {/* Confirm Dialog */}
+      <ConfirmDialogComponent />
     </div>
   );
 }

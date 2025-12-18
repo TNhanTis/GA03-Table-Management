@@ -19,17 +19,28 @@ export const PrintableQrTemplate = React.forwardRef((props, ref) => {
           display: "inline-block",
         }}
       >
-        <h1>Smart Restaurant</h1>
-        <h2>Bàn số: {tableData.table_number}</h2>
+        <h1 style={{ margin: "0 0 10px 0" }}>Smart Restaurant</h1>
+        <h2 style={{ margin: "10px 0", fontSize: "24px" }}>
+          Table: {tableData.table_number}
+        </h2>
 
-        <div style={{ margin: "20px auto", width: "fit-content" }}>
-          <QRCode value={tableData.qr_token || ""} size={256} />
+        <div
+          style={{
+            margin: "30px auto",
+            width: "fit-content",
+            background: "white",
+            padding: "10px",
+          }}
+        >
+          <QRCode
+            value={`http://localhost:5173/menu?table=${tableData.id}&token=${tableData.qr_token}`}
+            size={256}
+            level="H"
+          />
         </div>
 
-        <p style={{ fontSize: "18px", marginTop: "20px" }}>
-          Vui lòng quét mã để xem thực đơn
-          <br />
-          <i>Please scan to view menu</i>
+        <p style={{ fontSize: "16px", marginTop: "30px", lineHeight: "1.6" }}>
+          Scan to order
         </p>
       </div>
     </div>
