@@ -28,20 +28,26 @@ export class QrExportService {
     doc.fontSize(20).text(`Table: ${table.table_number}`, { align: 'center' });
     doc.moveDown();
 
-    // Sinh ảnh QR từ token
-    // Lưu ý: Token này phải là URL đầy đủ (ví dụ: https://domain.com/menu?...)
-    const qrDataUrl = await QRCode.toDataURL(table.qr_token || '', {
+    // Sinh ảnh QR từ URL đầy đủ
+    const qrUrl = `http://localhost:5173/menu?table=${table.id}&token=${table.qr_token}`;
+    const qrDataUrl = await QRCode.toDataURL(qrUrl, {
+      width: 300,
+      errorCorrectionLevel: 'H',
+    });
+
+    // Chèn ảnh QR vào giữa trang (QR height = 300px)
+    const qrYPosition = 150;
+    doc.image(qrDataUrl, (doc.page.width - 300) / 2, qrYPosition, {
       width: 300,
     });
 
-    // Chèn ảnh QR vào giữa trang
-    doc.image(qrDataUrl, (doc.page.width - 300) / 2, 150, { width: 300 });
-
-    // Hướng dẫn
-    doc.moveDown(12);
+    // Hướng dẫn bên dưới QR (QR kết thúc ở Y = 150 + 300 = 450)
     doc
       .fontSize(14)
-      .text('Quét mã để gọi món / Scan to order', { align: 'center' });
+      .text('Scan to order', (doc.page.width - 300) / 2, qrYPosition + 320, {
+        align: 'center',
+        width: 300,
+      });
 
     doc.end();
   }
@@ -61,9 +67,11 @@ export class QrExportService {
 
     // Duyệt qua danh sách bàn và thêm file vào zip
     for (const table of tables) {
-      // Tạo buffer ảnh PNG từ token
-      const buffer = await QRCode.toBuffer(table.qr_token || '', {
+      // Tạo QR từ URL đầy đủ
+      const qrUrl = `http://localhost:5173/menu?table=${table.id}&token=${table.qr_token}`;
+      const buffer = await QRCode.toBuffer(qrUrl, {
         width: 500,
+        errorCorrectionLevel: 'H',
       });
 
       // Thêm vào file zip với tên: Table-1.png
