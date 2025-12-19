@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { tablesApi } from "./api/tablesApi";
-import type { Table, CreateTableData, UpdateTableData } from "./api/tablesApi";
+import type { Table, CreateTableData } from "./api/tablesApi";
 import QRCode from "react-qr-code";
 import { useToast } from "./contexts/ToastContext";
 import { useConfirm } from "./components/ConfirmDialog";
@@ -150,7 +150,7 @@ function App() {
     if (!confirmed) return;
 
     try {
-      const result = await tablesApi.generateQr(tableId);
+      await tablesApi.generateQr(tableId);
       toast.success(`Tạo mã QR thành công!`);
       loadTables();
     } catch (err: any) {
