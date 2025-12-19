@@ -33,7 +33,9 @@ export const PrintableQrTemplate = React.forwardRef((props, ref) => {
           }}
         >
           <QRCode
-            value={`http://localhost:5173/menu?table=${tableData.id}&token=${tableData.qr_token}`}
+            value={`${
+              import.meta.env.VITE_MENU_URL || "http://localhost:5173/menu"
+            }?table=${tableData.id}&token=${tableData.qr_token}`}
             size={256}
             level="H"
           />
