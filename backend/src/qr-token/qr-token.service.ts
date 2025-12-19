@@ -37,7 +37,9 @@ export class QrTokenService {
     });
 
     // 5. Tạo URL đầy đủ
-    const qrUrl = `http://localhost:5173/menu?table=${tableId}&token=${token}`;
+    const frontendUrl =
+      process.env.FRONTEND_MENU_URL || 'http://localhost:5173/menu';
+    const qrUrl = `${frontendUrl}?table=${tableId}&token=${token}`;
 
     return { token, qrUrl, tableNumber: table.table_number };
   }
