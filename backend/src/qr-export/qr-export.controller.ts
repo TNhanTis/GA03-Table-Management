@@ -1,16 +1,19 @@
-import { Controller, Get, Param, Res } from '@nestjs/common';
+import { Controller, Get, Param, Res, NotFoundException } from '@nestjs/common';
 import type { Response } from 'express';
 import { QrExportService } from './qr-export.service';
 import { TablesService } from '../tables/tables.service';
 
 @Controller('tables/qr')
 export class QrExportController {
-  constructor(private readonly qrExportService: QrExportService) {}
+  constructor(
+    private readonly qrExportService: QrExportService,
+    private readonly tablesService: TablesService,
+  ) { }
 
   // API Download PDF của 1 bàn
   @Get(':id/download-pdf')
   async downloadPdf(@Param('id') id: string, @Res() res: Response) {
-    const table = await this.TablesService.findOne(id);
+    const table = await this.tablesService.findOne(id);
 
     if (!table) {
       throw new NotFoundException('Không tìm thấy bàn này');
@@ -20,13 +23,13 @@ export class QrExportController {
     if (!table.qr_token) {
       throw new NotFoundException('Bàn này chưa được tạo mã QR');
     }
-    return this.qrExportService.generateTablePdf(table, res);
+    return await this.qrExportService.generateTablePdf(table, res);
   }
 
   // API Download ZIP tất cả bàn
   @Get('download-all-zip')
   async downloadAllZip(@Res() res: Response) {
-    const allTables = await this.TablesService.findAll();
+    const allTables = await this.tablesService.findAll();
 
     // Lọc chỉ lấy những bàn có QR Token và đang Active
     const activeTables = allTables.filter(
@@ -37,6 +40,6 @@ export class QrExportController {
       throw new NotFoundException('Không có bàn nào hợp lệ để tải');
     }
 
-    return this.qrExportService.generateAllQrZip(allTables, res);
+    return await this.qrExportService.generateAllQrZip(activeTables, res);
   }
 }
