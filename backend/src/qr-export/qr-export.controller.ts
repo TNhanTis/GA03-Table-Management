@@ -26,6 +26,21 @@ export class QrExportController {
     return await this.qrExportService.generateTablePdf(table, res);
   }
 
+  // API Download PNG của 1 bàn
+  @Get(':id/download-png')
+  async downloadPng(@Param('id') id: string, @Res() res: Response) {
+    const table = await this.tablesService.findOne(id);
+
+    if (!table) {
+      throw new NotFoundException('Không tìm thấy bàn này');
+    }
+
+    if (!table.qr_token) {
+      throw new NotFoundException('Bàn này chưa được tạo mã QR');
+    }
+    return await this.qrExportService.generateTablePng(table, res);
+  }
+
   // API Download ZIP tất cả bàn
   @Get('download-all-zip')
   async downloadAllZip(@Res() res: Response) {

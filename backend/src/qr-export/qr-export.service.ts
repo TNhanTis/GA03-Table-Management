@@ -56,6 +56,27 @@ export class QrExportService {
     doc.end();
   }
 
+  // 1.1 Tạo 1 file PNG cho 1 bàn
+  async generateTablePng(table: Table, res: Response) {
+    const frontendUrl =
+      process.env.FRONTEND_MENU_URL || 'https://ga03-table-management-frontend.vercel.app/menu';
+    const qrUrl = `${frontendUrl}?table=${table.id}&token=${table.qr_token}`;
+    console.log('[PNG] QR URL:', qrUrl);
+    console.log('[PNG] FRONTEND_MENU_URL env:', process.env.FRONTEND_MENU_URL);
+    
+    const buffer = await QRCode.toBuffer(qrUrl, {
+      width: 500,
+      errorCorrectionLevel: 'H',
+    });
+
+    res.set({
+      'Content-Type': 'image/png',
+      'Content-Disposition': `attachment; filename=Table-${table.table_number}.png`,
+    });
+
+    res.send(buffer);
+  }
+
   // 2. Tạo file ZIP chứa tất cả QR Code (dạng ảnh PNG)
   async generateAllQrZip(tables: Table[], res: Response) {
     const archive = archiver('zip', {
