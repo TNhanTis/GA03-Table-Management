@@ -34,7 +34,7 @@ export const PrintableQrTemplate = React.forwardRef((props, ref) => {
         >
           <QRCode
             value={`${
-              import.meta.env.VITE_MENU_URL || "http://localhost:5173/menu"
+              import.meta.env.VITE_MENU_URL || "https://ga03-table-management-frontend.vercel.app/menu"
             }?table=${tableData.id}&token=${tableData.qr_token}`}
             size={256}
             level="H"
