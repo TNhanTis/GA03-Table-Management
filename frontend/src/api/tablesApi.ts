@@ -133,6 +133,13 @@ export const tablesApi = {
     return response.data;
   },
 
+  downloadPng: async (id: string) => {
+    const response = await api.get(`/tables/qr/${id}/download-png`, {
+      responseType: "blob",
+    });
+    return response.data;
+  },
+
   downloadAllZip: async () => {
     const response = await api.get("/tables/qr/download-all-zip", {
       responseType: "blob",

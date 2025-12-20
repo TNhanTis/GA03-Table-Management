@@ -188,6 +188,21 @@ export default function TableManagement() {
     }
   };
 
+  const handleDownloadPng = async (tableId: string, tableNumber: string) => {
+    try {
+      const blob = await tablesApi.downloadPng(tableId);
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `QR-${tableNumber}.png`;
+      link.click();
+      window.URL.revokeObjectURL(url);
+      toast.success("Đã tải ảnh PNG thành công!");
+    } catch (err: any) {
+      toast.error("Lỗi khi tải PNG");
+    }
+  };
+
   return (
     <div className="app">
       <header className="header">
@@ -335,6 +350,15 @@ export default function TableManagement() {
                       title="Download PDF"
                     >
                       📥 Download PDF
+                    </button>
+                    <button
+                      className="btn btn-sm btn-success"
+                      onClick={() =>
+                        handleDownloadPng(table.id, table.table_number)
+                      }
+                      title="Download Ảnh PNG"
+                    >
+                      🖼️ Download PNG
                     </button>
                   </>
                 ) : (
