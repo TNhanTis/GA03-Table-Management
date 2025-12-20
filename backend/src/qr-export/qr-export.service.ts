@@ -68,7 +68,9 @@ export class QrExportService {
     // Duyệt qua danh sách bàn và thêm file vào zip
     for (const table of tables) {
       // Tạo QR từ URL đầy đủ
-      const qrUrl = `http://localhost:5173/menu?table=${table.id}&token=${table.qr_token}`;
+      const frontendUrl =
+        process.env.FRONTEND_MENU_URL || 'https://ga03-table-management-frontend.vercel.app/menus';
+      const qrUrl = `${frontendUrl}?table=${table.id}&token=${table.qr_token}`;
       const buffer = await QRCode.toBuffer(qrUrl, {
         width: 500,
         errorCorrectionLevel: 'H',
