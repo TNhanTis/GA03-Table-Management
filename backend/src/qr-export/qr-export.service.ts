@@ -32,6 +32,8 @@ export class QrExportService {
     const frontendUrl =
       process.env.FRONTEND_MENU_URL || 'https://ga03-table-management-frontend.vercel.app/menu';
     const qrUrl = `${frontendUrl}?table=${table.id}&token=${table.qr_token}`;
+    console.log('[PDF] QR URL:', qrUrl);
+    console.log('[PDF] FRONTEND_MENU_URL env:', process.env.FRONTEND_MENU_URL);
     const qrDataUrl = await QRCode.toDataURL(qrUrl, {
       width: 300,
       errorCorrectionLevel: 'H',
@@ -73,6 +75,8 @@ export class QrExportService {
       const frontendUrl =
         process.env.FRONTEND_MENU_URL || 'https://ga03-table-management-frontend.vercel.app/menu';
       const qrUrl = `${frontendUrl}?table=${table.id}&token=${table.qr_token}`;
+      console.log('[ZIP] QR URL:', qrUrl);
+      console.log('[ZIP] FRONTEND_MENU_URL env:', process.env.FRONTEND_MENU_URL);
       const buffer = await QRCode.toBuffer(qrUrl, {
         width: 500,
         errorCorrectionLevel: 'H',
