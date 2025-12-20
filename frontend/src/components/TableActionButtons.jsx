@@ -16,8 +16,9 @@ const TableActionButtons = ({ table }) => {
   const handleDownloadPdf = async () => {
     try {
       // Gọi API NestJS (đường dẫn mà TV3 đã viết ở trên)
+      const apiUrl = import.meta.env.VITE_API_URL || "http://localhost:3000";
       const response = await fetch(
-        `http://localhost:3000/tables/qr/${table.id}/download-pdf`
+        `${apiUrl}/tables/qr/${table.id}/download-pdf`
       );
 
       if (!response.ok) throw new Error("Download failed");
