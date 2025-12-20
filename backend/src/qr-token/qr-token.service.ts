@@ -38,7 +38,7 @@ export class QrTokenService {
 
     // 5. Tạo URL đầy đủ
     const frontendUrl =
-      process.env.FRONTEND_MENU_URL || 'https://ga03-table-management-frontend.vercel.app/menus';
+      process.env.FRONTEND_MENU_URL || 'https://ga03-table-management-frontend.vercel.app/menu';
     const qrUrl = `${frontendUrl}?table=${tableId}&token=${token}`;
 
     return { token, qrUrl, tableNumber: table.table_number };

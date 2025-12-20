@@ -29,7 +29,9 @@ export class QrExportService {
     doc.moveDown();
 
     // Sinh ảnh QR từ URL đầy đủ
-    const qrUrl = `http://localhost:5173/menu?table=${table.id}&token=${table.qr_token}`;
+    const frontendUrl =
+      process.env.FRONTEND_MENU_URL || 'https://ga03-table-management-frontend.vercel.app/menu';
+    const qrUrl = `${frontendUrl}?table=${table.id}&token=${table.qr_token}`;
     const qrDataUrl = await QRCode.toDataURL(qrUrl, {
       width: 300,
       errorCorrectionLevel: 'H',
@@ -69,7 +71,7 @@ export class QrExportService {
     for (const table of tables) {
       // Tạo QR từ URL đầy đủ
       const frontendUrl =
-        process.env.FRONTEND_MENU_URL || 'https://ga03-table-management-frontend.vercel.app/menus';
+        process.env.FRONTEND_MENU_URL || 'https://ga03-table-management-frontend.vercel.app/menu';
       const qrUrl = `${frontendUrl}?table=${table.id}&token=${table.qr_token}`;
       const buffer = await QRCode.toBuffer(qrUrl, {
         width: 500,

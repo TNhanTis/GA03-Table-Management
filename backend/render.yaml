@@ -13,6 +13,8 @@ services:
         generateValue: true
       - key: FRONTEND_URL
         sync: false
+      - key: FRONTEND_MENU_URL
+        sync: false
       - key: PORT
         value: 3000
     healthCheckPath: /
