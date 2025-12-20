@@ -284,7 +284,7 @@ function App() {
                     <QRCode
                       value={`${
                         import.meta.env.VITE_MENU_URL ||
-                        "http://localhost:5173/menu"
+                        window.location.origin + "/menu"
                       }?table=${table.id}&token=${table.qr_token}`}
                       size={120}
                       level="H"
