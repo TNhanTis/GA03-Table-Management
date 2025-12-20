@@ -282,10 +282,13 @@ export default function TableManagement() {
                 {table.qr_token ? (
                   <div className="qr-section">
                     <QRCode
-                      value={`${
-                        import.meta.env.VITE_MENU_URL ||
-                        "https://ga03-table-management-frontend.vercel.app/menu"
-                      }?table=${table.id}&token=${table.qr_token}`}
+                      value={(() => {
+                        const menuUrl = import.meta.env.VITE_MENU_URL || "https://ga03-table-management-frontend.vercel.app/menu";
+                        const qrUrl = `${menuUrl}?table=${table.id}&token=${table.qr_token}`;
+                        console.log('QR URL for table', table.table_number, ':', qrUrl);
+                        console.log('VITE_MENU_URL env:', import.meta.env.VITE_MENU_URL);
+                        return qrUrl;
+                      })()}
                       size={120}
                       level="H"
                       style={{
