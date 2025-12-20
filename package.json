@@ -1,0 +1,10 @@
+{
+  "name": "ga03-table-management-root",
+  "private": true,
+  "scripts": {
+    "build": "cd frontend && npm install && npm run build"
+  },
+  "dependencies": {
+    "@nestjs/config": "^4.0.2"
+  }
+}
